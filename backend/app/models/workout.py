@@ -1,12 +1,13 @@
 from beanie import Document
-from pydantic import Field
+from pydantic import Field, BaseModel
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
+from ..core.types import PyObjectId
 
 class WorkoutExercise(Document):
     """Individual exercise within a workout with sets/reps configuration"""
-    exercise_id: ObjectId = Field(...)
+    exercise_id: PyObjectId = Field(...)
     sets: int = Field(ge=1)
     reps: int = Field(ge=1) 
     weight: Optional[float] = None  # in kg
@@ -19,10 +20,11 @@ class WorkoutExercise(Document):
 
 class Workout(Document):
     """A workout template containing multiple exercises"""
+    
     name: str = Field(...)
     description: Optional[str] = None
-    user_id: ObjectId = Field(...)
-    exercises: List[ObjectId] = []  # References to WorkoutExercise documents
+    user_id: PyObjectId = Field(...)
+    exercises: List[PyObjectId] = []  # References to WorkoutExercise documents
     estimated_duration: Optional[int] = None  # in minutes
     difficulty: str = "beginner"  # beginner, intermediate, advanced
     tags: List[str] = []  # e.g., ["push", "upper_body", "strength"]

@@ -4,10 +4,12 @@ from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
 
+from ..core.types import PyObjectId
+
 class SessionExercise(Document):
     """Actual performance of an exercise during a workout session"""
-    exercise_id: ObjectId = Field(...)
-    workout_exercise_id: ObjectId = Field(...)  # Reference to planned exercise
+    exercise_id: PyObjectId = Field(...)
+    workout_exercise_id: PyObjectId = Field(...)  # Reference to planned exercise
     sets_completed: int = Field(ge=0)
     actual_sets: List[dict] = []  # [{"reps": 12, "weight": 50.0, "rpe": 8}]
     notes: Optional[str] = None
@@ -19,12 +21,12 @@ class SessionExercise(Document):
 
 class WorkoutSession(Document):
     """A completed workout session"""
-    workout_id: ObjectId = Field(...)
-    user_id: ObjectId = Field(...)
-    split_id: Optional[ObjectId] = None  # If part of a split
+    workout_id: PyObjectId = Field(...)
+    user_id: PyObjectId = Field(...)
+    split_id: Optional[PyObjectId] = None  # If part of a split
     session_name: Optional[str] = None
-    exercises: List[ObjectId] = []  # References to SessionExercise documents
-    
+    exercises: List[PyObjectId] = []  # References to SessionExercise documents
+
     # Session timing
     started_at: datetime = Field(default_factory=datetime.utcnow)
     completed_at: Optional[datetime] = None

@@ -10,14 +10,29 @@ async def connect_to_mongo():
     global mongodb_client
     mongodb_client = AsyncIOMotorClient(settings.mongodb_url)
     
+    # Import all models
     from ..models.user import User
+    from ..models.exercise import Exercise
+    from ..models.workout import Workout, WorkoutExercise
+    from ..models.split import WorkoutSplit, SplitDay
+    from ..models.session import WorkoutSession, SessionExercise
     
     # Ensure database_name is not None
     if settings.database_name is None:
         raise ValueError("settings.database_name cannot be None")
+    
     await init_beanie(
         database=mongodb_client[settings.database_name],
-        document_models=[User]
+        document_models=[
+            User, 
+            Exercise, 
+            Workout, 
+            WorkoutExercise, 
+            WorkoutSplit, 
+            SplitDay, 
+            WorkoutSession, 
+            SessionExercise
+        ]
     )
 
 async def close_mongo_connection():
